@@ -35,4 +35,6 @@ dependencies {
 dependencies {
     implementation 'org.openftc:apriltag:1.1.0'
     implementation 'org.openftc:easyopencv:1.5.2'
+    implementation 'com.acmerobotics:dashboard:0.10.0'
+    implementation 'com.acmerobotics.dashboard:transmitter:0.10.0'
 }
