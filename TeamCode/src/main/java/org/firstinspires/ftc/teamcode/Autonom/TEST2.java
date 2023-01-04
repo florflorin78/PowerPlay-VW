@@ -196,6 +196,17 @@ public class TEST2 extends LinearOpMode {
                 idle();
             }
         }
+        private void updatePosition(double xSpeed, double ySpeed, double angSpeed){
+// actualizăm poziţia robotului în funcţie de vitezele motoarelor
+            xPos += xSpeed;
+            yPos += ySpeed;
+            angle += angSpeed;
+            // limităm unghiul la intervalul (-180, 180]
+            angle = angle % 360;
+            if (angle > 180) {
+                angle -= 360;
+            }
+        }
 
 // Funcţia de mutare a robotului cu un anumit număr de centimetri pe x şi y şi un anumit unghi în grade
         private void moveRobot(double x, double y, double angle) {
