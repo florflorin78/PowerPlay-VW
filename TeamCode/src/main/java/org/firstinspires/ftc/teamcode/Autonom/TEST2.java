@@ -8,6 +8,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
+
 @Autonomous(name="Autonom cu FTC Dashboard", group="Exemplu")
 public class TEST2 extends LinearOpMode {
 
@@ -196,6 +197,18 @@ public class TEST2 extends LinearOpMode {
                 idle();
             }
         }
+        private void updatePosition(double xSpeed, double ySpeed, double angSpeed){
+// actualizăm poziţia robotului în funcţie de vitezele motoarelor
+            xPos += xSpeed;
+            yPos += ySpeed;
+            angle += angSpeed;
+            // limităm unghiul la intervalul (-180, 180]
+            angle = angle % 360;
+            if (angle > 180) {
+                angle -= 360;
+            }
+        }
+
         private void updatePosition(double xSpeed, double ySpeed, double angSpeed){
 // actualizăm poziţia robotului în funcţie de vitezele motoarelor
             xPos += xSpeed;

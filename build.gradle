@@ -24,6 +24,11 @@ allprojects {
 }
 
 repositories {
+
+    maven {
+        url 'https://maven.acmerobotics.com/public'
+    }
+
     mavenCentral()
 
     flatDir {
