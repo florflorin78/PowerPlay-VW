@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Odometry;
 import org.firstinspires.ftc.teamcode.camera.CAM;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp")
@@ -25,6 +26,8 @@ public class TeleOp extends OpMode
     boolean GhearaB= false;
     double ValStanga=0.25;
     double ValDreapta=0.35;
+
+    Odometry odometry = new Odometry();
 
     @Override
     public void init() {
@@ -70,6 +73,8 @@ public class TeleOp extends OpMode
     RightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);*/
 
         telemetry.addData("Status", "Initialized");
+
+        odometry.runOpMode();
     }
 
     @Override
