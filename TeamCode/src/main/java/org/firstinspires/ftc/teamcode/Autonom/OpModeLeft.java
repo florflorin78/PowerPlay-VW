@@ -730,6 +730,58 @@ public class OpModeLeft extends LinearOpMode  {
         RightBack.setPower(0);
         sleep(1000);
     }
+    public boolean rotateToAngle(double targetAngle) {
+        // Setarea tolerantei de eroare pentru unghi
+        double angleTolerance = 5; // 5 grade
+
+        // Setarea limitei superioare si inferioare a unghiului tinta
+        double lowerLimit = targetAngle - angleTolerance;
+        double upperLimit = targetAngle + angleTolerance;
+
+        // Setarea puterii motorilor pentru rotatie
+        double rotatePower = 0.5;
+
+        // Determinarea sensului in care trebuie sa se roteasca robotul
+        boolean rotateClockwise;
+        if (angle < lowerLimit) {
+            rotateClockwise = true;
+        } else if (angle > upperLimit) {
+            rotateClockwise = false;
+        } else {
+            // Daca unghiul curent este deja in limitele tolerate, atunci nu este nevoie sa se rotesca
+            return true;
+        }
+
+        // Setarea puterii motorilor pentru rotatie in sensul dorit
+        if (rotateClockwise) {
+            RightFront.setPower(-rotatePower);
+            LeftFront.setPower(rotatePower);
+            RightBack.setPower(-rotatePower);
+            LeftBack.setPower(rotatePower);
+        } else {
+            RightFront.setPower(rotatePower);
+            LeftFront.setPower(-rotatePower);
+            RightBack.setPower(rotatePower);
+            LeftBack.setPower(-rotatePower);
+        }
+
+        // Asteptarea pana cand unghiul curent intra in limitele tolerate
+        while (opModeIsActive()) {
+            if (lowerLimit <= angle && angle <= upperLimit) {
+                // Oprirea motorilor
+                RightFront.setPower(0);
+                LeftFront.setPower(0);
+                RightBack.setPower(0);
+                LeftBack.setPower(0);
+
+                // Intoarcerea valorii true pentru a indica faptul ca rotatia a avut loc cu succes
+                return true;
+            }
+        }
+
+        // Daca programul a iesit din bucla inainte ca unghiul sa intre in limitele tolerate, atunci intoarcerea valorii false pentru a indica esecul rotatiei
+        return false;
+    }
 
 
     public void AsteaptaVirtual() // pentru eroarea cu Motorola
