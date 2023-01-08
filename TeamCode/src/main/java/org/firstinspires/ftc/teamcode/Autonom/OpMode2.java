@@ -13,6 +13,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
+import org.firstinspires.ftc.teamcode.Odometry;
+
 /*
     YELLOW  = Parking Left
     CYAN    = Parking Middle
@@ -40,6 +42,8 @@ public class OpMode2 extends LinearOpMode  {
     /// Stanga=0.05, Dreapta=0.7 - INCHIS
     //  interior-stanga scazi dreapta cresti
     //
+
+    Odometry odometry = new Odometry();
 
     SleeveDetection sleeveDetection;
     OpenCvCamera camera;
@@ -132,6 +136,8 @@ public class OpMode2 extends LinearOpMode  {
 
         telemetry.addData("Status", "S-a initializat fratic");
         telemetry.update();
+
+        odometry.runOpMode();
 
         waitForStart();
         AsteaptaVirtual();

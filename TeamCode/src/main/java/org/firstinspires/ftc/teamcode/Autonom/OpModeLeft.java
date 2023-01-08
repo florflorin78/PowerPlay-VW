@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Odometry;
 import org.firstinspires.ftc.teamcode.camera.SleeveDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -35,6 +36,8 @@ public class OpModeLeft extends LinearOpMode  {
     boolean GhearaB= false;
     double ValStanga=0.05;
     double ValDreapta=0.7;
+
+    Odometry odometry = new Odometry();
 
     /// Stanga=0.2; Dreapta=0.6; -  DESCHIS
     /// Stanga=0.05, Dreapta=0.7 - INCHIS
@@ -132,6 +135,8 @@ public class OpModeLeft extends LinearOpMode  {
 
         telemetry.addData("Status", "S-a initializat fratic");
         telemetry.update();
+
+        odometry.runOpMode();
 
         waitForStart();
         AsteaptaVirtual();
