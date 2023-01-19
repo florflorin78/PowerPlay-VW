@@ -27,7 +27,9 @@ public class TeleOp extends OpMode
     double ValStanga=0.25;
     double ValDreapta=0.35;
 
-    Odometry odometry = new Odometry();
+    double liftPower = 0;
+    final double MAX_POWER = 0.8;
+
 
     @Override
     public void init() {
@@ -71,10 +73,11 @@ public class TeleOp extends OpMode
     LeftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     RightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     RightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);*/
+        LiftStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LiftDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         telemetry.addData("Status", "Initialized");
 
-        odometry.runOpMode();
     }
 
     @Override
@@ -88,8 +91,8 @@ public class TeleOp extends OpMode
         double y = -gamepad1.left_stick_y;
         double x = -gamepad1.left_stick_x;
         double rx = gamepad1.right_stick_x;
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 2);
-        if(gamepad1.right_bumper == true){ denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 3.5);}
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 0.5);
+        if(gamepad1.right_bumper == true){ denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 2);}
         double LeftFrontPower = (y - x + rx)/denominator;
         double LeftBackPower = (y + x + rx)/denominator;
         double RightFrontPower = (y + x - rx)/denominator;
@@ -102,33 +105,58 @@ public class TeleOp extends OpMode
 
         if(gamepad2.right_bumper == false && GhearaB == false) GhearaB = true;
         if(gamepad2.right_bumper == true && GhearaB == true) {
-            if (ValStanga == 0.05 && ValDreapta == 0.25) {
+            if (ValStanga == 0.35 && ValDreapta == 0.45) {
                 ValStanga = 0.25;
                 ValDreapta = 0.35;
             }
             else
-            { ValStanga = 0.05;
-                ValDreapta = 0.25;}
+            { ValStanga = 0.35;
+                ValDreapta = 0.45;}
             GhearaB = false;
             ServoStanga.setPosition(ValStanga);
             ServoDreapta.setPosition(ValDreapta);
         }
 
-        if(gamepad2.x==true && gamepad2.left_bumper==true){
-            LiftStanga.setPower(0.88);
-            LiftDreapta.setPower(0.88);}
-        else if(gamepad2.b==true && gamepad2.left_bumper==true){
-            LiftStanga.setPower(-0.65);
-            LiftDreapta.setPower(-0.65);}
-        else if(gamepad2.x==true){
-            LiftStanga.setPower(0.4);
-            LiftDreapta.setPower(0.4);}
-        else if(gamepad2.b==true){
-            LiftStanga.setPower(-0.2);
-            LiftDreapta.setPower(-0.2);}
+//        if(gamepad2.x==true && gamepad2.left_bumper==true){
+//            LiftStanga.setPower(1);
+////            LiftDreapta.setPower(1);
+//        }
+//        else if(gamepad2.b==true && gamepad2.left_bumper==true){
+//            LiftStanga.setPower(-0.5);
+////            LiftDreapta.setPower(-0.5);
+//        }
+         if(gamepad2.x==true){
+            LiftStanga.setPower(1);
+            LiftDreapta.setPower(1);
+        }
+        if(gamepad2.b==true){
+            LiftStanga.setPower(-0.5);
+            LiftDreapta.setPower(-0.5);
+        }
         else
         {LiftStanga.setPower(0);
-         LiftDreapta.setPower(0);}
+         LiftDreapta.setPower(0);
+        }
+
+
+           if(gamepad2.dpad_up && liftPower < MAX_POWER) {
+            //Increase the lift power
+            liftPower += 0.01;
+            //Set the lift motor power to the new lift power level
+            LiftStanga.setPower(liftPower);
+        }
+        //If the down button is pressed and the lift is not at the minimum power level (0)
+        else if(gamepad2.dpad_down && liftPower > 0) {
+            //Decrease the lift power
+            liftPower -= 0.01;
+            //Set the lift motor power to the new lift power level
+            LiftStanga.setPower(liftPower);
+        }
+        //If the up and down buttons are not pressed
+        else {
+            //Do not change the lift power
+            LiftStanga.setPower(liftPower);
+        }
 
     }
     @Override

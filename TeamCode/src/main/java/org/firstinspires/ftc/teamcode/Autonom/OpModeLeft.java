@@ -25,19 +25,17 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class OpModeLeft extends LinearOpMode  {
 
     public ElapsedTime runtime = new ElapsedTime();
-    public DcMotor LeftFront = null;
-    public DcMotor LeftBack = null;
-    public DcMotor RightFront = null;
-    public DcMotor RightBack = null;
-    public DcMotor LiftStanga = null;
-    public DcMotor LiftDreapta = null;
-    public Servo ServoStanga = null;
-    public Servo ServoDreapta = null;
+    public DcMotor LeftFront;
+    public DcMotor LeftBack;
+    public DcMotor RightFront;
+    public DcMotor RightBack;
+    public DcMotor LiftStanga;
+    public DcMotor LiftDreapta;
+    public Servo ServoStanga;
+    public Servo ServoDreapta;
     boolean GhearaB= false;
     double ValStanga=0.05;
     double ValDreapta=0.7;
-
-    Odometry odometry = new Odometry();
 
     /// Stanga=0.2; Dreapta=0.6; -  DESCHIS
     /// Stanga=0.05, Dreapta=0.7 - INCHIS
@@ -135,8 +133,6 @@ public class OpModeLeft extends LinearOpMode  {
 
         telemetry.addData("Status", "S-a initializat fratic");
         telemetry.update();
-
-        odometry.runOpMode();
 
         waitForStart();
         AsteaptaVirtual();
@@ -730,58 +726,58 @@ public class OpModeLeft extends LinearOpMode  {
         RightBack.setPower(0);
         sleep(1000);
     }
-    public boolean rotateToAngle(double targetAngle) {
-        // Setarea tolerantei de eroare pentru unghi
-        double angleTolerance = 5; // 5 grade
-
-        // Setarea limitei superioare si inferioare a unghiului tinta
-        double lowerLimit = targetAngle - angleTolerance;
-        double upperLimit = targetAngle + angleTolerance;
-
-        // Setarea puterii motorilor pentru rotatie
-        double rotatePower = 0.5;
-
-        // Determinarea sensului in care trebuie sa se roteasca robotul
-        boolean rotateClockwise;
-        if (angle < lowerLimit) {
-            rotateClockwise = true;
-        } else if (angle > upperLimit) {
-            rotateClockwise = false;
-        } else {
-            // Daca unghiul curent este deja in limitele tolerate, atunci nu este nevoie sa se rotesca
-            return true;
-        }
-
-        // Setarea puterii motorilor pentru rotatie in sensul dorit
-        if (rotateClockwise) {
-            RightFront.setPower(-rotatePower);
-            LeftFront.setPower(rotatePower);
-            RightBack.setPower(-rotatePower);
-            LeftBack.setPower(rotatePower);
-        } else {
-            RightFront.setPower(rotatePower);
-            LeftFront.setPower(-rotatePower);
-            RightBack.setPower(rotatePower);
-            LeftBack.setPower(-rotatePower);
-        }
-
-        // Asteptarea pana cand unghiul curent intra in limitele tolerate
-        while (opModeIsActive()) {
-            if (lowerLimit <= angle && angle <= upperLimit) {
-                // Oprirea motorilor
-                RightFront.setPower(0);
-                LeftFront.setPower(0);
-                RightBack.setPower(0);
-                LeftBack.setPower(0);
-
-                // Intoarcerea valorii true pentru a indica faptul ca rotatia a avut loc cu succes
-                return true;
-            }
-        }
-
-        // Daca programul a iesit din bucla inainte ca unghiul sa intre in limitele tolerate, atunci intoarcerea valorii false pentru a indica esecul rotatiei
-        return false;
-    }
+//    public boolean rotateToAngle(double targetAngle) {
+//        // Setarea tolerantei de eroare pentru unghi
+//        double angleTolerance = 5; // 5 grade
+//
+//        // Setarea limitei superioare si inferioare a unghiului tinta
+//        double lowerLimit = targetAngle - angleTolerance;
+//        double upperLimit = targetAngle + angleTolerance;
+//
+//        // Setarea puterii motorilor pentru rotatie
+//        double rotatePower = 0.5;
+//
+//        // Determinarea sensului in care trebuie sa se roteasca robotul
+//        boolean rotateClockwise;
+//        if (angle < lowerLimit) {
+//            rotateClockwise = true;
+//        } else if (angle > upperLimit) {
+//            rotateClockwise = false;
+//        } else {
+//            // Daca unghiul curent este deja in limitele tolerate, atunci nu este nevoie sa se rotesca
+//            return true;
+//        }
+//
+//        // Setarea puterii motorilor pentru rotatie in sensul dorit
+//        if (rotateClockwise) {
+//            RightFront.setPower(-rotatePower);
+//            LeftFront.setPower(rotatePower);
+//            RightBack.setPower(-rotatePower);
+//            LeftBack.setPower(rotatePower);
+//        } else {
+//            RightFront.setPower(rotatePower);
+//            LeftFront.setPower(-rotatePower);
+//            RightBack.setPower(rotatePower);
+//            LeftBack.setPower(-rotatePower);
+//        }
+//
+//        // Asteptarea pana cand unghiul curent intra in limitele tolerate
+//        while (opModeIsActive()) {
+//            if (lowerLimit <= angle && angle <= upperLimit) {
+//                // Oprirea motorilor
+//                RightFront.setPower(0);
+//                LeftFront.setPower(0);
+//                RightBack.setPower(0);
+//                LeftBack.setPower(0);
+//
+//                // Intoarcerea valorii true pentru a indica faptul ca rotatia a avut loc cu succes
+//                return true;
+//            }
+//        }
+//
+//        // Daca programul a iesit din bucla inainte ca unghiul sa intre in limitele tolerate, atunci intoarcerea valorii false pentru a indica esecul rotatiei
+//        return false;
+//    }
 
 
     public void AsteaptaVirtual() // pentru eroarea cu Motorola

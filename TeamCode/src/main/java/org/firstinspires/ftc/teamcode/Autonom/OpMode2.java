@@ -35,15 +35,14 @@ public class OpMode2 extends LinearOpMode  {
     public Servo ServoStanga = null;
     public Servo ServoDreapta = null;
     boolean GhearaB= false;
-    double ValStanga=0.05;
-    double ValDreapta=0.7;
+    double ValStanga=0.21;
+    double ValDreapta=0.62;
 
-    /// Stanga=0.2; Dreapta=0.6; -  DESCHIS
+    /// Stanga=0.35; Dreapta=0.53; -  DESCHIS
     /// Stanga=0.05, Dreapta=0.7 - INCHIS
     //  interior-stanga scazi dreapta cresti
     //
 
-    Odometry odometry = new Odometry();
 
     SleeveDetection sleeveDetection;
     OpenCvCamera camera;
@@ -137,7 +136,6 @@ public class OpMode2 extends LinearOpMode  {
         telemetry.addData("Status", "S-a initializat fratic");
         telemetry.update();
 
-        odometry.runOpMode();
 
         waitForStart();
         AsteaptaVirtual();
@@ -149,19 +147,20 @@ public class OpMode2 extends LinearOpMode  {
      */
 
         if(sleeveDetection.getPosition() == SleeveDetection.ParkingPosition.LEFT) {
-            telemetry.addData("Status", "CAZ 1");
+            telemetry.addData("Status", "CAZ 1 - YELLOW");
 
 
             GhearaInchide();
-            LIFTURCAT(0.5, 350);
-            DreaptaDist(0.5, 580);
-            InainteDist(0.5, 325);
+            LIFTURCAT(0.5, 150);
+            DreaptaInainte45Dist(0.6, 535);
+            InainteDist(0.8, 2050);
+            LIFTURCAT(0.5, 850);
+            StangaDist(0.5, 570);
+            InainteDist(0.5, 200);
             GhearaDeschide();
-            InapoiDist(0.5, 250);
-            StangaDist(0.5, 600);
-            InainteDist(0.5, 1100);
-            StangaDist(0.5, 1200);
-//LEFT
+            InapoiDist(0.5, 200);
+            InvarteDreaptaDist(0.8, 800);
+            InainteDist(0.8, 2000);
 
 
 //            GhearaInchide();
@@ -443,7 +442,7 @@ public class OpMode2 extends LinearOpMode  {
 
         while(LeftFront.isBusy() && RightBack.isBusy())
         {}
-        Stop();
+//        Stop();
         LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
         //RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
         //LeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
@@ -472,7 +471,7 @@ public class OpMode2 extends LinearOpMode  {
         while(RightFront.isBusy() && LeftBack.isBusy())
         {}
 
-        Stop();
+//        Stop();
 
         //LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
         RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
@@ -503,7 +502,7 @@ public class OpMode2 extends LinearOpMode  {
 
         while(RightFront.isBusy() && LeftBack.isBusy())
         {}
-        Stop();
+//        Stop();
         //LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
         RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
         LeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);

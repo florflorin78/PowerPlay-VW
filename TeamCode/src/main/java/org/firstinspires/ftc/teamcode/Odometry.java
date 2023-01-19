@@ -5,19 +5,19 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class Odometry extends LinearOpMode {
     // Declararea motorilor si a encodeurilor
-    DcMotor motorFrontRight;
-    DcMotor motorFrontLeft;
-    DcMotor motorBackRight;
-    DcMotor motorBackLeft;
-    DcMotor encoderFrontRight;
-    DcMotor encoderFrontLeft;
-    DcMotor encoderBackRight;
-    DcMotor encoderBackLeft;
+    DcMotor LeftFront;
+    DcMotor LeftBack;
+    DcMotor RightFront;
+    DcMotor RightBack;
+    DcMotor encoderLeftFront;
+    DcMotor encoderLeftBack;
+    DcMotor encoderRightFront;
+    DcMotor encoderRightBack;
 
     // Declararea constantelor pentru rezolutia encodeurilor si diametrul rotilor
-    static final double ENCODER_RESOLUTION = 1000;
-    static final double WHEEL_DIAMETER = 50;
-    static final double WHEEL_BASE = 500;
+    static final double ENCODER_RESOLUTION = 537.7 ;
+    static final double WHEEL_DIAMETER = 96; //9.6cm
+    static final double WHEEL_BASE = 290; //29cm
 
     // Declararea variabilelor pentru pozitia si unghiul robotului
     double xPos = 0;
@@ -26,29 +26,29 @@ public class Odometry extends LinearOpMode {
 
     public void runOpMode() {
         // Initalizarea motorilor si a encodeurilor
-        motorFrontRight = hardwareMap.dcMotor.get("front_right");
-        motorFrontLeft = hardwareMap.dcMotor.get("front_left");
-        motorBackRight = hardwareMap.dcMotor.get("back_right");
-        motorBackLeft = hardwareMap.dcMotor.get("back_left");
-        encoderFrontRight = hardwareMap.dcMotor.get("front_right_encoder");
-        encoderFrontLeft = hardwareMap.dcMotor.get("front_left_encoder");
-        encoderBackRight = hardwareMap.dcMotor.get("back_right_encoder");
-        encoderBackLeft = hardwareMap.dcMotor.get("back_left_encoder");
+        LeftFront =  hardwareMap.get(DcMotor.class, "LeftFront");
+        LeftBack  =  hardwareMap.get(DcMotor.class, "LeftBack");
+        RightFront = hardwareMap.get(DcMotor.class, "RightFront");
+        RightBack =  hardwareMap.get(DcMotor.class, "RightBack");
+//        encoderLeftFront = hardwareMap.dcMotor.get("front_right_encoder");
+//        encoderLeftBack = hardwareMap.dcMotor.get("front_left_encoder");
+//        encoderRightFront = hardwareMap.dcMotor.get("back_right_encoder");
+//        encoderRightBack = hardwareMap.dcMotor.get("back_left_encoder");
 
         // Setarea modului de operare al encodeurilor la RUN_USING_ENCODER
-        motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
 
         while (opModeIsActive()) {
             // Citirea numarului de impulsuri de la encodeuri
-            int frontRightCount = encoderFrontRight.getCurrentPosition();
-            int frontLeftCount = encoderFrontLeft.getCurrentPosition();
-            int backRightCount = encoderBackRight.getCurrentPosition();
-            int backLeftCount = encoderBackLeft.getCurrentPosition();
+            int frontRightCount = RightFront.getCurrentPosition();
+            int frontLeftCount = LeftFront.getCurrentPosition();
+            int backRightCount = RightBack.getCurrentPosition();
+            int backLeftCount = LeftBack.getCurrentPosition();
 
             // Calcularea rotatiei rotilor in radiani
             double frontRightRot = frontRightCount * 2 * Math.PI / ENCODER_RESOLUTION;
