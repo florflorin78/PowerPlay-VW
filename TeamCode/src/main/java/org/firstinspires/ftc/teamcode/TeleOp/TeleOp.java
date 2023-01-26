@@ -21,9 +21,9 @@ public class TeleOp extends OpMode
     private DcMotor LiftStanga = null;
     private DcMotor LiftDreapta = null;
 
-    private Servo ServoGheara = null;
+     Servo ServoGheara = null;
     boolean GhearaB = false;
-    double GhearaVal = ;
+    double GhearaVal = 0.5;
 
     @Override
     public void init() {
@@ -116,12 +116,12 @@ public class TeleOp extends OpMode
 
 
         if(gamepad2.x==true) {
-            LiftDreapta.setPower(1);
-            LiftStanga.setPower(1);
+            LiftDreapta.setPower(0.8);
+            LiftStanga.setPower(0.8);
         }
         else if(gamepad2.b==true) {
-            LiftDreapta.setPower(-1);
-            LiftStanga.setPower(-1);
+            LiftDreapta.setPower(-0.5);
+            LiftStanga.setPower(-0.5);
         }
         else {
             LiftDreapta.setPower(0);

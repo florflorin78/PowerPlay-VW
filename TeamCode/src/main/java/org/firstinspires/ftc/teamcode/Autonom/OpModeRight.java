@@ -13,28 +13,28 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-import org.firstinspires.ftc.teamcode.Odometry;
-
 /*
     YELLOW  = Parking Left
     CYAN    = Parking Middle
     MAGENTA = Parking Right
      */
 
-@Autonomous(name="OpMode")
+@Autonomous(name="OpModeRight")
 ///@Disabled
-public class OpMode2 extends LinearOpMode  {
+public class OpModeRight extends LinearOpMode  {
 
     public ElapsedTime runtime = new ElapsedTime();
     public DcMotor LeftFront = null;
     public DcMotor LeftBack = null;
     public DcMotor RightFront = null;
     public DcMotor RightBack = null;
-    public DcMotor Lift = null;
+    public DcMotor LiftStanga = null;
+    public DcMotor LiftDreapta = null;
     public Servo ServoGheara = null;
+
     boolean GhearaB= false;
-    double GhearaValDeschide = ;
-    double GhearaValInchide = ;
+    double GhearaValDeschide = 0.5;
+    double GhearaValInchide = 0.5;
 
     SleeveDetection sleeveDetection;
     OpenCvCamera camera;
@@ -48,39 +48,45 @@ public class OpMode2 extends LinearOpMode  {
         LeftBack  =  hardwareMap.get(DcMotor.class, "LeftBack");
         RightFront = hardwareMap.get(DcMotor.class, "RightFront");
         RightBack =  hardwareMap.get(DcMotor.class, "RightBack");
-        Lift = hardwareMap.get(DcMotor.class, "Lift");
+        LiftStanga = hardwareMap.get(DcMotor.class, "LiftStanga");
+        LiftDreapta = hardwareMap.get(DcMotor.class, "LiftDreapta");
         ServoGheara = hardwareMap.get(Servo.class, "ServoGheara");
 
         LeftFront.setPower(0);
         LeftBack.setPower(0);
         RightFront.setPower(0);
         RightBack.setPower(0);
-        Lift.setPower(0);
+        LiftStanga.setPower(0);
+        LiftDreapta.setPower(0);
 
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
         LeftBack.setDirection(DcMotor.Direction.REVERSE);
         RightBack.setDirection(DcMotor.Direction.FORWARD);
-        Lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        LiftStanga.setDirection(DcMotor.Direction.FORWARD);
+        LiftDreapta.setDirection(DcMotor.Direction.REVERSE);
         ServoGheara.setDirection(Servo.Direction.FORWARD);
 
         LeftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LeftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LiftDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LiftStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         LeftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LeftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LiftDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LiftStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ServoGheara.setPosition(GhearaValInchide);
 
@@ -111,7 +117,8 @@ public class OpMode2 extends LinearOpMode  {
                 LeftBack.getCurrentPosition(),
                 RightFront.getCurrentPosition(),
                 RightBack.getCurrentPosition(),
-                Lift.getCurrentPosition());
+                LiftDreapta.getCurrentPosition(),
+                LiftDreapta.getCurrentPosition());
         telemetry.update();
 
 
@@ -190,21 +197,27 @@ public class OpMode2 extends LinearOpMode  {
 
         if(opModeIsActive()) {
 
-        LiftTargetStanga = Lift.getCurrentPosition();
+            LiftTargetStanga = LiftStanga.getCurrentPosition();
+            LiftTargetDreapta = LiftDreapta.getCurrentPosition();
 
-            Lift.setTargetPosition(distance);
+            LiftStanga.setTargetPosition(distance);
+            LiftDreapta.setTargetPosition(distance);
 
-            Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LiftStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LiftDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         runtime.reset();
 
-            Lift.setPower(power);
+            LiftStanga.setPower(power);
+            LiftDreapta.setPower(power);
 
-        while(opModeIsActive() && Lift.isBusy())
+        while(opModeIsActive() && LiftStanga.isBusy() && LiftDreapta.isBusy())
         {}
-            Lift.setPower(0);
+            LiftStanga.setPower(0);
+            LiftDreapta.setPower(0);
 
-            Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     }
@@ -215,21 +228,27 @@ public class OpMode2 extends LinearOpMode  {
 
         if(opModeIsActive()) {
 
-            LiftTargetStanga = Lift.getCurrentPosition();
+            LiftTargetStanga = LiftStanga.getCurrentPosition();
+            LiftTargetDreapta = LiftDreapta.getCurrentPosition();
 
-            Lift.setTargetPosition(distance);
+            LiftStanga.setTargetPosition(distance);
+            LiftDreapta.setTargetPosition(distance);
 
-            Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LiftStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LiftDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             runtime.reset();
 
-            Lift.setPower(-power);
+            LiftStanga.setPower(-power);
+            LiftDreapta.setPower(-power);
 
-            while(opModeIsActive() && Lift.isBusy())
+            while(opModeIsActive() && LiftStanga.isBusy() && LiftDreapta.isBusy())
             {}
-            Lift.setPower(0);
+            LiftStanga.setPower(0);
+            LiftDreapta.setPower(0);
 
-            Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 
     }
@@ -574,11 +593,13 @@ public class OpMode2 extends LinearOpMode  {
     }
     public void LiftUrcat(double power)
     {
-        Lift.setPower(power);
+        LiftStanga.setPower(power);
+        LiftDreapta.setPower(power);
     }
     public void LiftCoborat(double power)
     {
-        Lift.setPower(-power);
+        LiftStanga.setPower(-power);
+        LiftDreapta.setPower(-power);
     }
     public void Stop()
     {
