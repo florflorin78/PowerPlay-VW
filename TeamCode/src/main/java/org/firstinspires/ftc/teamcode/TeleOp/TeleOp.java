@@ -120,8 +120,8 @@ public class TeleOp extends OpMode
             LiftStanga.setPower(0.8);
         }
         else if(gamepad2.b==true) {
-            LiftDreapta.setPower(-0.5);
-            LiftStanga.setPower(-0.5);
+            LiftDreapta.setPower(-0.55);
+            LiftStanga.setPower(-0.55);
         }
         else {
             LiftDreapta.setPower(0);
