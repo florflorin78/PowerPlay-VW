@@ -23,7 +23,9 @@ public class TeleOp extends OpMode
 
      Servo ServoGheara = null;
     boolean GhearaB = false;
-    double GhearaVal = 0.5;
+    double closedPosition = 0.53;
+    double openPosition = 0.1;
+    double GhearaVal = 0.53;
 
     @Override
     public void init() {
@@ -53,7 +55,7 @@ public class TeleOp extends OpMode
         LiftStanga.setPower(0);
         LiftDreapta.setPower(0);
 
-        ServoGheara.setPosition(GhearaVal);
+        ServoGheara.setPosition(closedPosition);
 
         LeftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LeftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -101,27 +103,33 @@ public class TeleOp extends OpMode
         RightFront.setPower(RightFrontPower); // -
         RightBack.setPower(RightBackPower);   // +
 
-       if(gamepad2.right_bumper == false && GhearaB == false) GhearaB = true;
-        if(gamepad2.right_bumper == true && GhearaB == true) {
-            if (GhearaVal == 0.6) {
-                GhearaVal = -0.45;
+        if(gamepad2.dpad_down == false && GhearaB == false) GhearaB = true;
+        if(gamepad2.dpad_down == true && GhearaB == true) {
+            if (GhearaVal == closedPosition) {
+                GhearaVal = openPosition;
             }
-            else {
-                GhearaVal = 0.6;
+            else if(GhearaVal == openPosition){
+                GhearaVal = closedPosition;}
                 GhearaB = false;
-            }
+
             ServoGheara.setPosition(GhearaVal);
             //GhearaVal =
         }
+        telemetry.addData("Servo", ServoGheara.getPosition());
+        telemetry.update();
 
+        if(gamepad2.a)
+            ServoGheara.setPosition(closedPosition);
+        if(gamepad2.y)
+            ServoGheara.setPosition(openPosition);
 
         if(gamepad2.x==true) {
-            LiftDreapta.setPower(0.8);
-            LiftStanga.setPower(0.8);
+            LiftDreapta.setPower(0.4);
+            LiftStanga.setPower(0.4);
         }
         else if(gamepad2.b==true) {
-            LiftDreapta.setPower(-0.55);
-            LiftStanga.setPower(-0.55);
+            LiftDreapta.setPower(-0.2);
+            LiftStanga.setPower(-0.2);
         }
         else {
             LiftDreapta.setPower(0);
