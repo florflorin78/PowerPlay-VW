@@ -9,10 +9,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Odometry;
+import org.firstinspires.ftc.teamcode.camera.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.camera.SleeveDetection;
+import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+
+import java.util.ArrayList;
 
 /*
     YELLOW  = Parking Left
@@ -24,6 +28,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 ///@Disabled
 public class OpModeLeft extends LinearOpMode  {
 
+    static final double FEET_PER_METER = 3.28084;
+
     public ElapsedTime runtime = new ElapsedTime();
     public DcMotor LeftFront;
     public DcMotor LeftBack;
@@ -34,15 +40,27 @@ public class OpModeLeft extends LinearOpMode  {
     public Servo ServoStanga;
     public Servo ServoDreapta;
 
+    double fx = 578.272;
+    double fy = 578.272;
+    double cx = 402.145;
+    double cy = 221.506;
+
+    double tagsize = 0.166;
+
+    int Left = 1;
+    int Middle = 2;
+    int Right = 3;
+
     boolean GhearaB= false;
     double GhearaValStangaOpen = 0.63;
     double GhearaValStangaClosed = 0.48;
     double GhearaValDreaptaOpen = 0.63;
     double GhearaValDreaptaClosed = 0.48;
 
-
-    SleeveDetection sleeveDetection;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
     OpenCvCamera camera;
+
+    AprilTagDetection tagOfInterest = null;
 
     String webcam= "Webcam 1";
 
@@ -100,10 +118,10 @@ public class OpModeLeft extends LinearOpMode  {
         ServoDreapta.setPosition(GhearaValDreaptaClosed);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcam), cameraMonitorViewId);
-        sleeveDetection = new SleeveDetection();
-        camera.setPipeline(sleeveDetection);
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
+        camera.setPipeline(aprilTagDetectionPipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -117,20 +135,68 @@ public class OpModeLeft extends LinearOpMode  {
         });
 
         while (!isStarted()) {
-            telemetry.addData("CAZ: ", sleeveDetection.getPosition());
+            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+
+            if(currentDetections.size() != 0)
+            {
+                boolean tagFound = false;
+
+                for(AprilTagDetection tag : currentDetections)
+                {
+                    if(tag.id == Left || tag.id == Middle || tag.id == Right)
+                    {
+                        tagOfInterest = tag;
+                        tagFound = true;
+                        break;
+                    }
+                }
+
+                if(tagFound)
+                {
+                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+                    tagToTelemetry(tagOfInterest);
+                    if(tagOfInterest.id == Left)
+                        telemetry.addData("Status", "CAZ 1 - Left");
+                    else if(tagOfInterest.id == Middle)
+                        telemetry.addData("Status", "CAZ 2 - Middle");
+                    else if(tagOfInterest.id == Right)
+                        telemetry.addData("Status", "CAZ 3 - Right");
+                }
+                else
+                {
+                    telemetry.addLine("Don't see tag of interest :(");
+
+                    if(tagOfInterest == null)
+                    {
+                        telemetry.addLine("(The tag has never been seen)");
+                    }
+                    else
+                    {
+                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                        tagToTelemetry(tagOfInterest);
+                    }
+                }
+
+            }
+            else
+            {
+                telemetry.addLine("Don't see tag of interest :(");
+
+                if(tagOfInterest == null)
+                {
+                    telemetry.addLine("(The tag has never been seen)");
+                }
+                else
+                {
+                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                    tagToTelemetry(tagOfInterest);
+                }
+
+            }
+
             telemetry.update();
+            sleep(20);
         }
-
-        telemetry.addData("Path", "Starting at %7d :%7d",
-                LeftFront.getCurrentPosition(),
-                LeftBack.getCurrentPosition(),
-                RightFront.getCurrentPosition(),
-                RightBack.getCurrentPosition(),
-                LiftDreapta.getCurrentPosition(),
-                LiftDreapta.getCurrentPosition());
-
-        telemetry.update();
-
 
         telemetry.addData("Status", "S-a initializat fratic");
         telemetry.update();
@@ -144,7 +210,7 @@ public class OpModeLeft extends LinearOpMode  {
     MAGENTA = Parking Right
      */
 
-        if(sleeveDetection.getPosition() == SleeveDetection.ParkingPosition.LEFT) {
+        if(tagOfInterest == null || tagOfInterest.id == Left) {
             telemetry.addData("Status", "CAZ 1");
 
 
@@ -162,7 +228,7 @@ public class OpModeLeft extends LinearOpMode  {
 
         }
 
-        else if(sleeveDetection.getPosition() == SleeveDetection.ParkingPosition.CENTER) {
+        else if(tagOfInterest.id == Middle) {
             telemetry.addData("Status", "CAZ 2");
 
             GhearaInchide();
@@ -179,7 +245,7 @@ public class OpModeLeft extends LinearOpMode  {
 
         }
 
-        else if(sleeveDetection.getPosition() == SleeveDetection.ParkingPosition.RIGHT) {
+        else if(tagOfInterest.id == Right) {
             telemetry.addData("Status", "CAZ 3");
 
             GhearaInchide();
@@ -197,6 +263,17 @@ public class OpModeLeft extends LinearOpMode  {
         }
 
 
+    }
+
+    void tagToTelemetry(AprilTagDetection detection)
+    {
+        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
+        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
+        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
+        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
 
     public void LIFTURCAT(double power, int distance)
