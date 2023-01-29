@@ -216,9 +216,9 @@ public class OpModeRight extends LinearOpMode  {
             GhearaInchide();
             LIFTURCAT(0.5, 250);
             DreaptaInainte45Dist(0.6, 480);
-            InainteDist(0.8, 2050);
-            LIFTURCAT(0.55, 1550);
-            StangaDist(0.5, 570);
+            InainteDist(0.5, 2050);
+            LIFTURCAT(0.55, 1350);
+            StangaDist(0.5, 615);
             InainteDist(0.5, 200);
             GhearaDeschide();
             InapoiDist(0.5, 200);
@@ -234,8 +234,8 @@ public class OpModeRight extends LinearOpMode  {
             LIFTURCAT(0.5, 250);
             DreaptaInainte45Dist(0.6, 480);
             InainteDist(0.5, 2050);
-            LIFTURCAT(1, 5200);
-            StangaDist(0.5, 570);
+            LIFTURCAT(0.55, 1350);
+            StangaDist(0.5, 615);
             InainteDist(0.5, 200);
             GhearaDeschide();
             InapoiDist(0.5, 200);
@@ -251,8 +251,8 @@ public class OpModeRight extends LinearOpMode  {
             LIFTURCAT(0.5, 250);
             DreaptaInainte45Dist(0.6, 480);
             InainteDist(0.5, 2050);
-            LIFTURCAT(1, 5200);
-            StangaDist(0.5, 570);
+            LIFTURCAT(0.55, 1350);
+            StangaDist(0.5, 615);
             InainteDist(0.5, 200);
             GhearaDeschide();
             InapoiDist(0.5, 200);
@@ -297,8 +297,8 @@ public class OpModeRight extends LinearOpMode  {
 
         while(opModeIsActive() && LiftStanga.isBusy() && LiftDreapta.isBusy())
         {}
-            LiftStanga.setPower(0);
-            LiftDreapta.setPower(0);
+            LiftStanga.setPower(0.01);
+            LiftDreapta.setPower(-0.01);
 
             LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -328,8 +328,8 @@ public class OpModeRight extends LinearOpMode  {
 
             while(opModeIsActive() && LiftStanga.isBusy() && LiftDreapta.isBusy())
             {}
-            LiftStanga.setPower(0);
-            LiftDreapta.setPower(0);
+            LiftStanga.setPower(0.01);
+            LiftDreapta.setPower(-0.01);
 
             LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
