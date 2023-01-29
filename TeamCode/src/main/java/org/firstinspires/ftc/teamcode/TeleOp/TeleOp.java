@@ -21,11 +21,15 @@ public class TeleOp extends OpMode
     private DcMotor LiftStanga = null;
     private DcMotor LiftDreapta = null;
 
-     Servo ServoGheara = null;
+     Servo ServoStanga = null;
+     Servo ServoDreapta = null;
     boolean GhearaB = false;
-    double closedPosition = 0.53;
-    double openPosition = 0.1;
-    double GhearaVal = 0.53;
+    double closedStanga = 0.53;
+    double openStanga = 0.37;
+    double closedDreapta = 0.53;
+    double openDreapta = 0.37;
+    double GhearaValStanga = 0.53;
+    double GhearaValDreapta = 0.53;
 
     @Override
     public void init() {
@@ -37,7 +41,8 @@ public class TeleOp extends OpMode
         LiftStanga = hardwareMap.get(DcMotor.class, "LiftStanga");
         LiftDreapta = hardwareMap.get(DcMotor.class, "LiftDreapta");
 
-        ServoGheara = hardwareMap.get(Servo.class, "ServoGheara");
+        ServoStanga = hardwareMap.get(Servo.class, "ServoStanga");
+        ServoDreapta = hardwareMap.get(Servo.class, "ServoDreapta");
 
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
@@ -45,7 +50,8 @@ public class TeleOp extends OpMode
         RightBack.setDirection(DcMotor.Direction.FORWARD);
         LiftStanga.setDirection(DcMotor.Direction.FORWARD);
         LiftDreapta.setDirection(DcMotor.Direction.REVERSE);
-        ServoGheara.setDirection(Servo.Direction.FORWARD);
+        ServoStanga.setDirection(Servo.Direction.REVERSE);
+        ServoDreapta.setDirection(Servo.Direction.FORWARD);
 
         LeftFront.setPower(0);
         LeftBack.setPower(0);
@@ -55,7 +61,8 @@ public class TeleOp extends OpMode
         LiftStanga.setPower(0);
         LiftDreapta.setPower(0);
 
-        ServoGheara.setPosition(closedPosition);
+        ServoStanga.setPosition(closedStanga);
+        ServoDreapta.setPosition(closedDreapta);
 
         LeftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LeftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -103,25 +110,32 @@ public class TeleOp extends OpMode
         RightFront.setPower(RightFrontPower); // -
         RightBack.setPower(RightBackPower);   // +
 
-        if(gamepad2.dpad_down == false && GhearaB == false) GhearaB = true;
-        if(gamepad2.dpad_down == true && GhearaB == true) {
-            if (GhearaVal == closedPosition) {
-                GhearaVal = openPosition;
+        if(gamepad2.right_bumper == false && GhearaB == false) GhearaB = true;
+        if(gamepad2.right_bumper == true && GhearaB == true) {
+            if (GhearaValStanga == closedStanga && GhearaValDreapta == closedDreapta) {
+                GhearaValStanga = openStanga;
+                GhearaValDreapta = openDreapta;
             }
-            else if(GhearaVal == openPosition){
-                GhearaVal = closedPosition;}
+            else{
+                GhearaValStanga = closedStanga;
+                GhearaValDreapta = closedDreapta;}
                 GhearaB = false;
 
-            ServoGheara.setPosition(GhearaVal);
+            ServoStanga.setPosition(GhearaValStanga);
+            ServoDreapta.setPosition(GhearaValDreapta);
             //GhearaVal =
         }
-        telemetry.addData("Servo", ServoGheara.getPosition());
+        telemetry.addData("ServoStanga", ServoStanga.getPosition());
+        telemetry.addData("ServoDreapta", ServoDreapta.getPosition());
         telemetry.update();
+/*        if(gamepad2.y ==true){
+            ServoStanga.setPosition(openStanga);
+            ServoDreapta.setPosition(openDreapta);
+        }
+        if(gamepad2.a == true)
+        {ServoStanga.setPosition(closedStanga);
+            ServoDreapta.setPosition(closedDreapta);}*/
 
-        if(gamepad2.a)
-            ServoGheara.setPosition(closedPosition);
-        if(gamepad2.y)
-            ServoGheara.setPosition(openPosition);
 
         if(gamepad2.x==true) {
             LiftDreapta.setPower(0.4);
@@ -131,9 +145,13 @@ public class TeleOp extends OpMode
             LiftDreapta.setPower(-0.2);
             LiftStanga.setPower(-0.2);
         }
+        else if(gamepad2.a==true) {
+            LiftDreapta.setPower(0.02);
+            LiftStanga.setPower(0.02);
+        }
         else {
-            LiftDreapta.setPower(0);
-            LiftStanga.setPower(0);
+            LiftDreapta.setPower(0.00);
+            LiftStanga.setPower(0.00);
         }
 
 

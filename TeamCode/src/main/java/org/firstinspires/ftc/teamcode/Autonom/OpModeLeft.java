@@ -31,11 +31,15 @@ public class OpModeLeft extends LinearOpMode  {
     public DcMotor RightBack;
     public DcMotor LiftStanga = null;
     public DcMotor LiftDreapta = null;
-    public Servo ServoGheara;
+    public Servo ServoStanga;
+    public Servo ServoDreapta;
 
     boolean GhearaB= false;
-    double GhearaValDeschide = 0.5;
-    double GhearaValInchide = 0.5;
+    double GhearaValStangaOpen = 0.63;
+    double GhearaValStangaClosed = 0.48;
+    double GhearaValDreaptaOpen = 0.63;
+    double GhearaValDreaptaClosed = 0.48;
+
 
     SleeveDetection sleeveDetection;
     OpenCvCamera camera;
@@ -51,7 +55,8 @@ public class OpModeLeft extends LinearOpMode  {
         RightBack =  hardwareMap.get(DcMotor.class, "RightBack");
         LiftStanga = hardwareMap.get(DcMotor.class, "LiftStanga");
         LiftDreapta = hardwareMap.get(DcMotor.class, "LiftDreapta");
-        ServoGheara = hardwareMap.get(Servo.class, "ServoGheara");
+        ServoStanga = hardwareMap.get(Servo.class, "ServoStanga");
+        ServoDreapta = hardwareMap.get(Servo.class, "ServoDreapta");
 
         LeftFront.setPower(0);
         LeftBack.setPower(0);
@@ -67,7 +72,8 @@ public class OpModeLeft extends LinearOpMode  {
         RightBack.setDirection(DcMotor.Direction.FORWARD);
         LiftStanga.setDirection(DcMotor.Direction.FORWARD);
         LiftDreapta.setDirection(DcMotor.Direction.REVERSE);
-        ServoGheara.setDirection(Servo.Direction.FORWARD);
+        ServoStanga.setDirection(Servo.Direction.FORWARD);
+        ServoDreapta.setDirection(Servo.Direction.REVERSE);
 
         LeftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LeftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -90,7 +96,8 @@ public class OpModeLeft extends LinearOpMode  {
         LiftDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LiftStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        ServoGheara.setPosition(GhearaValInchide);
+        ServoStanga.setPosition(GhearaValStangaClosed);
+        ServoDreapta.setPosition(GhearaValDreaptaClosed);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcam), cameraMonitorViewId);
@@ -260,13 +267,15 @@ public class OpModeLeft extends LinearOpMode  {
 
     public void GhearaDeschide()
     {
-        ServoGheara.setPosition(GhearaValDeschide);
+        ServoStanga.setPosition(GhearaValStangaOpen);
+        ServoDreapta.setPosition(GhearaValDreaptaOpen);
         Stop();
     }
     public void GhearaInchide()
     {
 
-        ServoGheara.setPosition(GhearaValInchide);
+        ServoStanga.setPosition(GhearaValStangaClosed);
+        ServoDreapta.setPosition(GhearaValDreaptaClosed);
         Stop();
     }
 
