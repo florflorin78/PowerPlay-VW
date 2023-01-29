@@ -19,7 +19,7 @@ apply from: '../build.dependencies.gradle'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace = 'com.info1robotics.bobot'
+    namespace = 'com.virtualwolves'
 }
 
 dependencies {
