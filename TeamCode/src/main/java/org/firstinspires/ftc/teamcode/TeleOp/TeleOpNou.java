@@ -38,14 +38,6 @@ public class TeleOpNou extends LinearOpMode {
                     -gamepad1.left_stick_x
             ).rotated(-poseEstimate.getHeading());
 
-//            drive.setWeightedDrivePower(
-//                    new Pose2d(
-//                            input.getX(),
-//                            input.getY(),
-//                            -gamepad1.right_stick_x
-//                    )
-//            );
-
             drive.update();
 
             double x = -gamepad1.left_stick_x;
