@@ -38,13 +38,13 @@ public class TeleOpNou extends LinearOpMode {
                     -gamepad1.left_stick_x
             ).rotated(-poseEstimate.getHeading());
 
-            drive.setWeightedDrivePower(
-                    new Pose2d(
-                            input.getX(),
-                            input.getY(),
-                            -gamepad1.right_stick_x
-                    )
-            );
+//            drive.setWeightedDrivePower(
+//                    new Pose2d(
+//                            input.getX(),
+//                            input.getY(),
+//                            -gamepad1.right_stick_x
+//                    )
+//            );
 
             drive.update();
 
@@ -67,7 +67,6 @@ public class TeleOpNou extends LinearOpMode {
 
                 robot.ServoStanga.setPosition( robot.GhearaValStanga);
                 robot.ServoDreapta.setPosition( robot.GhearaValDreapta);
-                //GhearaVal =
             }
 
             telemetry.addData("x", poseEstimate.getX());
@@ -119,9 +118,13 @@ public class TeleOpNou extends LinearOpMode {
         }
 
         public void setDrivePower(double x, double y, double rx) {
+
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 2);
+
             if(gamepad1.left_bumper == true){ denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 4);}
+
             if(gamepad1.right_bumper == true) { denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 0.5);}
+
             double LeftFrontPower = (y - x + rx)/denominator;
             double LeftBackPower = (y + x + rx)/denominator;
             double RightFrontPower = (y + x - rx)/denominator;
