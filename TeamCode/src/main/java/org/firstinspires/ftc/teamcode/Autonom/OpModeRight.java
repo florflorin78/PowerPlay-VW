@@ -346,6 +346,7 @@ public class OpModeRight extends LinearOpMode  {
         ServoDreapta.setPosition(GhearaValDreaptaOpen);
         Stop();
     }
+
     public void GhearaInchide()
     {
         ServoStanga.setPosition(GhearaValStangaClosed);
