@@ -20,9 +20,9 @@ public class RoadRunnerRight extends LinearOpMode {
 
     Robot robot = new Robot(hardwareMap);
 
-    public  static double START_X1 = 23.5;
-    public  static double START_Y1 = -72;
-    public  static double START_HEADING = 90.0;
+    public static double START_X1 = 23.5;
+    public static double START_Y1 = -72;
+    public static double START_HEADING = 90.0;
 
 
 
