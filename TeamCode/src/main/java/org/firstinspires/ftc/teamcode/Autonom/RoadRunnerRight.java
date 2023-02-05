@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.Advanced.PoseStorage;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.Robot;
 
@@ -129,7 +131,7 @@ public void runOpMode() throws InterruptedException {
 
 
 
-
+    PoseStorage.currentPose = drive.getPoseEstimate();
 }
     public void LIFT_URCAT(double power, int distance)
     {
