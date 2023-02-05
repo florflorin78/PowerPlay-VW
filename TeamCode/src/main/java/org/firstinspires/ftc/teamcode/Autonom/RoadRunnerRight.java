@@ -22,6 +22,9 @@ public class RoadRunnerRight extends LinearOpMode {
     public  static double START_Y1 = -72;
     public  static double START_HEADING = 90.0;
 
+
+
+
     Trajectory START_TO_HIGH_PRELOAD;        //start cycle
 
     Trajectory HIGH_PRELOAD_TO_STACK_CONE1; //cone_cycle_1
@@ -55,7 +58,7 @@ public void runOpMode() throws InterruptedException {
     START_TO_HIGH_PRELOAD = drive.trajectoryBuilder(startPose)
                     .splineToLinearHeading(new Pose2d(20, 0, Math.toRadians(0)), Math.toRadians(40))
                     .addDisplacementMarker(pathLength -> pathLength * 0.3, () -> {
-
+                    LIFT_URCAT(0.5, 1500);
                     })
                     .build();
 
