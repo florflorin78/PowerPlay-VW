@@ -10,11 +10,12 @@ public class Robot {
     public DcMotorEx leftFront, leftRear, rightRear, rightFront, LiftDreapta, LiftStanga;
     public Servo ServoStanga, ServoDreapta;
 
+    public double denominator;
+
     public boolean GhearaB = false;
-    public double closedStanga = 0.53,openStanga = 0.37, closedDreapta = 0.53, openDreapta = 0.37, GhearaValStanga = 0.53, GhearaValDreapta = 0.53;
+    public double  closedStanga = 0.48,openStanga = 0.63, closedDreapta = 0.48, openDreapta = 0.63, GhearaValStanga = 0.53, GhearaValDreapta = 0.53;
 
     public Robot(HardwareMap hardwareMap) {
-        // Initialize motors
         leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
         leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
         rightRear = hardwareMap.get(DcMotorEx.class, "RightBack");
@@ -45,9 +46,19 @@ public class Robot {
         }
     }
 
-    public void setDrivePower(double x, double y, double rx) {
+    public void GhearaDeschide() {
+        ServoStanga.setPosition(openStanga);
+        ServoDreapta.setPosition(openDreapta);
+    }
 
-        public boolean denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 2);
+    public void GhearaInchide()
+    {
+        ServoStanga.setPosition(closedStanga);
+        ServoDreapta.setPosition(closedDreapta);
+    }
+
+    public void setDrivePower(double x, double y, double rx) {
+        denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 2);
 
         double LeftFrontPower = (y - x + rx)/denominator;
         double LeftBackPower = (y + x + rx)/denominator;
@@ -58,6 +69,6 @@ public class Robot {
         leftRear.setPower(LeftBackPower);     // -
         rightFront.setPower(RightFrontPower); // -
         rightRear.setPower(RightBackPower);   // +
-
     }
+
 }

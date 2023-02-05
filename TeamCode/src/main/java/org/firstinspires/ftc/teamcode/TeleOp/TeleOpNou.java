@@ -41,9 +41,9 @@ public class TeleOpNou extends LinearOpMode {
             double y = -gamepad1.left_stick_y;
             double rx = gamepad1.right_stick_x;
 
-            if( gamepad1.left_bumper == true )  { robot.setDrivePower().denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 4);}
+            if( gamepad1.left_bumper == true )  { robot.denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 4);}
 
-            if( gamepad1.right_bumper == true ) { robot.setDrivePower().denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 0.5);}
+            if( gamepad1.right_bumper == true ) { robot.denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 0.5);}
 
             robot.setDrivePower(x, y, rx);
 

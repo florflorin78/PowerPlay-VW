@@ -6,10 +6,13 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.Robot;
 
 public class RoadRunnerRight extends LinearOpMode {
+
+    Robot robot = new Robot(hardwareMap);
+
     public  static double START_X1 = 23.5;
     public  static double START_Y1 = -72;
     public  static double START_HEADING = 90.0;
@@ -37,7 +40,7 @@ public class RoadRunnerRight extends LinearOpMode {
 public void runOpMode() throws InterruptedException {
     SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-    //GhearaInchide()
+    robot.GhearaInchide();
 
     Pose2d startPose = new Pose2d(START_X1, START_Y1, START_HEADING);
     ElapsedTime timer = new ElapsedTime();
