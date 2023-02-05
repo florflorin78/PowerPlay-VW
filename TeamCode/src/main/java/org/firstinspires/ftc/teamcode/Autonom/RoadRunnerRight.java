@@ -17,23 +17,23 @@ public class RoadRunnerRight extends LinearOpMode {
     public  static double START_Y1 = -72;
     public  static double START_HEADING = 90.0;
 
-    Trajectory START_TO_HIGH_PRELOAD;
+    Trajectory START_TO_HIGH_PRELOAD;        //start cycle
 
-    Trajectory HIGH_PRELOAD_TO_STACK_CONE1;
-    Trajectory STACK_CONE1_TO_HIGH_CONE;
+    Trajectory HIGH_PRELOAD_TO_STACK_CONE1; //cone_cycle_1
+    Trajectory STACK_CONE1_TO_HIGH_CONE;    //
 
-    Trajectory HIGH_CONE_TO_STACK_CONE2;
-    Trajectory STACK_CONE2_TO_HIGH_CONE;
+    Trajectory HIGH_CONE_TO_STACK_CONE2;    //cone_cycle_2
+    Trajectory STACK_CONE2_TO_HIGH_CONE;    //
 
-    Trajectory HIGH_CONE_TO_STACK_CONE3;
-    Trajectory STACK_CONE3_TO_HIGH_CONE;
+    Trajectory HIGH_CONE_TO_STACK_CONE3;    //cone_cycle_3
+    Trajectory STACK_CONE3_TO_HIGH_CONE;    //
 
-    Trajectory HIGH_CONE_TO_STACK_CONE4;
-    Trajectory STACK_CONE4_TO_HIGH_CONE;
+    Trajectory HIGH_CONE_TO_STACK_CONE4;    //cone_cycle_4
+    Trajectory STACK_CONE4_TO_HIGH_CONE;    //
 
-    Trajectory HIGH_CONE_TO_PARK1;
-    Trajectory HIGH_CONE_TO_PARK2;
-    Trajectory HIGH_CONE_TO_PARK3;
+    Trajectory HIGH_CONE_TO_PARK1;          // park1
+    Trajectory HIGH_CONE_TO_PARK2;          // park2
+    Trajectory HIGH_CONE_TO_PARK3;          // park3
 
 
     @Override
