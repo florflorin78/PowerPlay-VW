@@ -1,14 +1,19 @@
 package org.firstinspires.ftc.teamcode.Autonom;
 
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.Robot;
 
+@Config
+@Autonomous(name="RoadRunnerRight")
 public class RoadRunnerRight extends LinearOpMode {
 
     Robot robot = new Robot(hardwareMap);
@@ -49,6 +54,9 @@ public void runOpMode() throws InterruptedException {
 
     START_TO_HIGH_PRELOAD = drive.trajectoryBuilder(startPose)
                     .splineToLinearHeading(new Pose2d(20, 0, Math.toRadians(0)), Math.toRadians(40))
+                    .addDisplacementMarker(pathLength -> pathLength * 0.3, () -> {
+
+                    })
                     .build();
 
 
@@ -112,11 +120,76 @@ public void runOpMode() throws InterruptedException {
 
         waitForStart();
 
-//    if (!isStopRequested())
-//
-//        drive.followTrajectorySequence(trajSeq);
+    if (!isStopRequested()) return;
+
+        drive.followTrajectory(START_TO_HIGH_PRELOAD);
+
+
 
 
 }
+    public void LIFT_URCAT(double power, int distance)
+    {
+        if(opModeIsActive()) {
+            robot.LiftStanga.setTargetPosition(distance);
+            robot.LiftDreapta.setTargetPosition(distance);
 
+            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            runtime.reset();
+            robot.LiftStanga.setPower(power);
+            robot.LiftDreapta.setPower(power);
+
+            while(opModeIsActive() && robot.LiftStanga.isBusy() && robot.LiftDreapta.isBusy())
+            {}
+            robot.LiftStanga.setPower(0.01);
+            robot.LiftDreapta.setPower(-0.01);
+
+            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+    public void LIFT_COBORAT(double power, int distance)
+    {
+        if(opModeIsActive()) {
+            robot.LiftStanga.setTargetPosition(distance);
+            robot.LiftDreapta.setTargetPosition(distance);
+
+            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            runtime.reset();
+            robot.LiftStanga.setPower(-power);
+            robot.LiftDreapta.setPower(-power);
+
+            while(opModeIsActive() && robot.LiftStanga.isBusy() && robot.LiftDreapta.isBusy())
+            {}
+            robot.LiftStanga.setPower(0.01);
+            robot.LiftDreapta.setPower(-0.01);
+
+            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+
+    }
+
+//    public void UP(double power)
+//    {
+//        robot.LiftStanga.setPower(power);
+//        robot.LiftDreapta.setPower(power);
+//    }
+//    public void DOWN(double power)
+//    {
+//        robot.LiftStanga.setPower(-power);
+//        robot.LiftDreapta.setPower(-power);
+//    }
+
+    public void Stop()
+    {
+        robot.leftFront.setPower(0);
+        robot.rightFront.setPower(0);
+        robot.leftRear.setPower(0);
+        robot.rightRear.setPower(0);
+        sleep(1000);
+    }
 }
