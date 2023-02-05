@@ -57,9 +57,9 @@ public class MeepMeepTesting {
                                 .lineToSplineHeading(new Pose2d(23.5, -7, Math.toRadians(90)))
 
                                 //caz 1 11.5 -11.5
-//                                .lineToSplineHeading(new Pose2d(11.5, -11.5, Math.toRadians(90)))
+                                .lineToSplineHeading(new Pose2d(11.5, -11.5, Math.toRadians(90)))
                                 //caz 2 35.5 -11.5
-                                .lineToSplineHeading(new Pose2d(35.5, -11.5, Math.toRadians(90)))
+//                                .lineToSplineHeading(new Pose2d(35.5, -11.5, Math.toRadians(90)))
                                 //caz 3 58.5 -11.5
 //                                .lineToSplineHeading(new Pose2d(58.5, -11.5, Math.toRadians(90)))
                                 .build()
