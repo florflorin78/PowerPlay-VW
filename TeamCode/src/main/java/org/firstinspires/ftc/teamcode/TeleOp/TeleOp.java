@@ -23,6 +23,9 @@ public class TeleOp extends OpMode
     boolean GhearaB = false;
     double closedStanga = 0.53;
     double openStanga = 0.37;
+
+
+
     double closedDreapta = 0.53;
     double openDreapta = 0.37;
     double GhearaValStanga = 0.53;

@@ -25,6 +25,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -63,6 +64,9 @@ public class SampleMecanumDrive extends MecanumDrive {
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
 
+    public boolean GhearaB = false;
+    public double  closedStanga = 0.53,openStanga = 0.37, closedDreapta = 0.53, openDreapta = 0.37, GhearaValStanga = 0.53, GhearaValDreapta = 0.53;
+
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
@@ -70,7 +74,10 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private TrajectoryFollower follower;
 
-    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
+    private DcMotorEx leftFront, leftRear, rightRear, rightFront ,LiftDreapta, LiftStanga;
+
+    public Servo ServoStanga, ServoDreapta;
+
     private List<DcMotorEx> motors;
 
     private BNO055IMU imu;
@@ -101,10 +108,25 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightRear = hardwareMap.get(DcMotorEx.class, "RightBack");
         rightFront = hardwareMap.get(DcMotorEx.class, "RightFront");
 
+        LiftStanga = hardwareMap.get(DcMotorEx.class, "LiftStanga");
+        LiftDreapta = hardwareMap.get(DcMotorEx.class, "LiftDreapta");
+
+        ServoStanga = hardwareMap.get(Servo.class, "ServoStanga");
+        ServoDreapta = hardwareMap.get(Servo.class, "ServoDreapta");
+
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightRear.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
+
+        LiftStanga.setDirection(DcMotor.Direction.FORWARD);
+        LiftDreapta.setDirection(DcMotor.Direction.REVERSE);
+
+        ServoStanga.setDirection(Servo.Direction.REVERSE);
+        ServoDreapta.setDirection(Servo.Direction.FORWARD);
+
+        LiftStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LiftDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -130,6 +152,17 @@ public class SampleMecanumDrive extends MecanumDrive {
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+    }
+
+    public void GhearaDeschide() {
+        ServoStanga.setPosition(openStanga);
+        ServoDreapta.setPosition(openDreapta);
+    }
+
+    public void GhearaInchide()
+    {
+        ServoStanga.setPosition(closedStanga);
+        ServoDreapta.setPosition(closedDreapta);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
