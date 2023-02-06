@@ -58,6 +58,11 @@ public class Robot {
     }
 
     public void setDrivePower(double x, double y, double rx) {
+
+//        if( gamepad1.left_bumper == true )  { denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 4);}
+//
+//        if( gamepad1.right_bumper == true ) { denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 0.5);}
+
         denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 2);
 
         double LeftFrontPower = (y - x + rx)/denominator;

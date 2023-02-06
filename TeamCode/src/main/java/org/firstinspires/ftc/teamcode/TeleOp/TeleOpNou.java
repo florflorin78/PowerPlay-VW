@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="TeleOpOfficial")
 public class TeleOpNou extends LinearOpMode {
@@ -19,7 +20,12 @@ public class TeleOpNou extends LinearOpMode {
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        drive.setPoseEstimate(PoseStorage.currentPose);
+//        drive.setPoseEstimate(PoseStorage.currentPose);
+
+        Pose2d startPose = new Pose2d(23.5, -72, 20.43);
+
+        drive.setPoseEstimate(startPose);
+
 
         waitForStart();
 
@@ -41,9 +47,6 @@ public class TeleOpNou extends LinearOpMode {
             double y = -gamepad1.left_stick_y;
             double rx = gamepad1.right_stick_x;
 
-            if( gamepad1.left_bumper == true )  { robot.denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 4);}
-
-            if( gamepad1.right_bumper == true ) { robot.denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 0.5);}
 
             robot.setDrivePower(x, y, rx);
 

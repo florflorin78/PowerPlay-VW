@@ -7,7 +7,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Advanced.PoseStorage;
@@ -18,14 +17,20 @@ import org.firstinspires.ftc.teamcode.Robot;
 @Autonomous(name="RoadRunnerRight")
 public class RoadRunnerRight extends LinearOpMode {
 
-    Robot robot = new Robot(hardwareMap);
+//    Robot robot = new Robot(hardwareMap);
 
-    public static double START_X1 = 23.5;
+    public static double START_TO_FORWARD = 82;
+
+    public static double START_TO_HIGH_PRELOAD_X = 8;
+    public static double START_TO_HIGH_PRELOAD_Y = -13;
+    public static double START_TO_HIGH_PRELOAD_TG = 45;
+
+    public static double START_X1 = 26;
     public static double START_Y1 = -72;
-    public static double START_HEADING = 90.0;
+    public static double START_HEADING = 20.43;
 
 
-
+    Trajectory START_FORWARD;
 
     Trajectory START_TO_HIGH_PRELOAD;        //start cycle
 
@@ -50,20 +55,24 @@ public class RoadRunnerRight extends LinearOpMode {
 public void runOpMode() throws InterruptedException {
     SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-    robot.GhearaInchide();
+//    robot.GhearaInchide();
 
     Pose2d startPose = new Pose2d(START_X1, START_Y1, START_HEADING);
+
     ElapsedTime timer = new ElapsedTime();
 
     drive.setPoseEstimate(startPose);
 
-    START_TO_HIGH_PRELOAD = drive.trajectoryBuilder(startPose)
-                    .splineToLinearHeading(new Pose2d(20, 0, Math.toRadians(0)), Math.toRadians(40))
-                    .addDisplacementMarker(pathLength -> pathLength * 0.3, () -> {
-                    LIFT_URCAT(0.5, 1500);
-                    })
-                    .build();
+    START_FORWARD = drive.trajectoryBuilder(startPose)
+                      .forward(START_TO_FORWARD)
+                      .build();
 
+    START_TO_HIGH_PRELOAD =  drive.trajectoryBuilder(START_FORWARD.end())
+                      .splineToConstantHeading(new Vector2d(START_TO_HIGH_PRELOAD_X, START_TO_HIGH_PRELOAD_Y), Math.toRadians(START_TO_HIGH_PRELOAD_TG))
+//                    .addDisplacementMarker(pathLength -> pathLength * 0.3, () -> {
+//                    LIFT_URCAT(0.5, 1500);
+//                    })
+                     .build();
 
 
 
@@ -125,76 +134,73 @@ public void runOpMode() throws InterruptedException {
 
         waitForStart();
 
-    if (!isStopRequested()) return;
-
         drive.followTrajectory(START_TO_HIGH_PRELOAD);
-
 
 
     PoseStorage.currentPose = drive.getPoseEstimate();
 }
-    public void LIFT_URCAT(double power, int distance)
-    {
-        if(opModeIsActive()) {
-            robot.LiftStanga.setTargetPosition(distance);
-            robot.LiftDreapta.setTargetPosition(distance);
-
-            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            runtime.reset();
-            robot.LiftStanga.setPower(power);
-            robot.LiftDreapta.setPower(power);
-
-            while(opModeIsActive() && robot.LiftStanga.isBusy() && robot.LiftDreapta.isBusy())
-            {}
-            robot.LiftStanga.setPower(0.01);
-            robot.LiftDreapta.setPower(-0.01);
-
-            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
-
-    public void LIFT_COBORAT(double power, int distance)
-    {
-        if(opModeIsActive()) {
-            robot.LiftStanga.setTargetPosition(distance);
-            robot.LiftDreapta.setTargetPosition(distance);
-
-            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            runtime.reset();
-            robot.LiftStanga.setPower(-power);
-            robot.LiftDreapta.setPower(-power);
-
-            while(opModeIsActive() && robot.LiftStanga.isBusy() && robot.LiftDreapta.isBusy())
-            {}
-            robot.LiftStanga.setPower(0.01);
-            robot.LiftDreapta.setPower(-0.01);
-
-            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-
-    }
-
-//    public void UP(double power)
+//    public void LIFT_URCAT(double power, int distance)
 //    {
-//        robot.LiftStanga.setPower(power);
-//        robot.LiftDreapta.setPower(power);
+//        if(opModeIsActive()) {
+//            robot.LiftStanga.setTargetPosition(distance);
+//            robot.LiftDreapta.setTargetPosition(distance);
+//
+//            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+////            runtime.reset();
+//            robot.LiftStanga.setPower(power);
+//            robot.LiftDreapta.setPower(power);
+//
+//            while(opModeIsActive() && robot.LiftStanga.isBusy() && robot.LiftDreapta.isBusy())
+//            {}
+//            robot.LiftStanga.setPower(0.01);
+//            robot.LiftDreapta.setPower(-0.01);
+//
+//            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        }
 //    }
-//    public void DOWN(double power)
+//
+//    public void LIFT_COBORAT(double power, int distance)
 //    {
-//        robot.LiftStanga.setPower(-power);
-//        robot.LiftDreapta.setPower(-power);
+//        if(opModeIsActive()) {
+//            robot.LiftStanga.setTargetPosition(distance);
+//            robot.LiftDreapta.setTargetPosition(distance);
+//
+//            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+////            runtime.reset();
+//            robot.LiftStanga.setPower(-power);
+//            robot.LiftDreapta.setPower(-power);
+//
+//            while(opModeIsActive() && robot.LiftStanga.isBusy() && robot.LiftDreapta.isBusy())
+//            {}
+//            robot.LiftStanga.setPower(0.01);
+//            robot.LiftDreapta.setPower(-0.01);
+//
+//            robot.LiftStanga.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            robot.LiftDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        }
+//
 //    }
-
-    public void Stop()
-    {
-        robot.leftFront.setPower(0);
-        robot.rightFront.setPower(0);
-        robot.leftRear.setPower(0);
-        robot.rightRear.setPower(0);
-        sleep(1000);
-    }
+//
+////    public void UP(double power)
+////    {
+////        robot.LiftStanga.setPower(power);
+////        robot.LiftDreapta.setPower(power);
+////    }
+////    public void DOWN(double power)
+////    {
+////        robot.LiftStanga.setPower(-power);
+////        robot.LiftDreapta.setPower(-power);
+////    }
+//
+//    public void Stop()
+//    {
+//        robot.leftFront.setPower(0);
+//        robot.rightFront.setPower(0);
+//        robot.leftRear.setPower(0);
+//        robot.rightRear.setPower(0);
+//        sleep(1000);
+//    }
 }
